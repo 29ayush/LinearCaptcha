@@ -1,0 +1,66 @@
+<html>
+<head>
+<title> AMULYAM EARNING BY : ALLTECHINONE.COM </title>
+</head>
+</html>
+
+<?php
+$email=$_REQUEST['email'];
+$pwd=$_REQUEST['pwd'];
+echo "Your Username : ".$email."<br/>";
+echo unverified($email,$pwd);
+
+function unverified($email,$pwd)
+{
+$agent="Dalvik/1.6.0 (Linux; U; Android 4.0.4; GT-P3 Build/IMM)";
+$data="      ";
+$url="http://108.168.215.182:8880/rest";
+$ip="10.0.2.".rand(1,100);
+$ch=curl_init();
+curl_setopt( $ch, CURLOPT_URL, "$url/login/?email=$email&pwd=$pwd");
+curl_setopt( $ch, CURLOPT_USERAGENT, $agent );
+curl_setopt($ch,CURLOPT_POSTFIELDS,$data);
+curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+curl_setopt($ch,CURLOPT_FOLLOWLOCATION,true);
+$html = curl_exec($ch);
+$html=json_decode($html, true);
+
+$ide=$html['ide'];
+$idp=$html['idp'];
+
+if(empty($ide) || empty($idp) ) die("Some Error Occured Notify Admin,MayBe Wrong Pass");
+
+if(!empty($_REQUEST['getbal']))
+{
+$bal="http://108.168.215.182:8880/rest/balance?ide=$ide&idp=$idp";
+curl_setopt( $ch, CURLOPT_URL, "$bal");
+curl_setopt($ch,CURLOPT_POST,0);
+$balhtml = curl_exec($ch);
+$balhtml= json_decode($balhtml, true);
+$balance=$balhtml['amt'];
+echo "Initial Balance : ".$balance."<br>";
+}
+
+$bonus="$url/dailyLoginCredits?ide=$ide&idp=$idp&ip=".$ip;
+curl_setopt( $ch, CURLOPT_URL, $bonus);
+curl_setopt($ch,CURLOPT_POST,0);
+$bonushtml = curl_exec($ch);
+$bonushtml= json_decode($bonushtml, true);
+
+if($bonushtml['loginCredited']!="Y") return "Daily Login Bonus For Today Already Claimed";
+
+if(!empty($_REQUEST['getbal']))
+{
+$bal="http://108.168.215.182:8880/rest/balance?ide=$ide&idp=$idp";
+curl_setopt( $ch, CURLOPT_URL, "$bal");
+curl_setopt($ch,CURLOPT_POST,0);
+$balhtml = curl_exec($ch);
+$balhtml= json_decode($balhtml, true);
+$balance=$balhtml['amt'];
+echo "Daily Login Bonus For Today is Now Claimed";
+return "<br/>Final Balance : ".$balance."<br>";
+}
+
+return "Daily Login Bonus For Today is Now Claimed";
+}
+?>

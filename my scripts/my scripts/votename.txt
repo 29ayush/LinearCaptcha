@@ -1,0 +1,18 @@
+function getbrandgamepostdata($html)
+	{
+	preg_match('/<input type=\"radio\" value=\"(.*)\" name=\"option\[\]\" class=\"hidden\" id=\"category_5\">/', $html, $matches);
+	$value = urlencode($matches[1]);
+	$value = str_replace("%20", "+", $value);
+	preg_match("/el.name='(.*)'.(.*)\((.*)\)/i", $html, $matches);
+	$name = $matches[1];
+	$func = $matches[2];
+	$index = $matches[3];
+	$index = explode(',', $index);
+	if ($index[1] == "") $index[1] = strlen($name);
+	if ($func == "substring" || $func == "slice") $newname = substr($name, $index[0], $index[1] - $index[0]);
+	elseif ($func == "substr") $newname = substr($name, $index[0], $index[1]);
+	elseif ($func == "charAt") $newname = $name[$index[0]];
+	$submit = $newname . "=" . $name . $newname;
+	$url = "http://ultoo.com/brands_ques.php?fbshare=1&option[]=$value&$submit&button=Locking...";
+	return $url;
+	}

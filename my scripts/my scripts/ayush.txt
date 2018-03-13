@@ -1,0 +1,30 @@
+ root pass = fa68c72K
+31.220.50.115, port = 2205 === url =http://31.220.50.115:4206/tesseract-ocr
+31.220.50.118 2213     
+hiq63409@doiea.com and pwd = bindass4m
+
+https://github.com/thiagoalessio/tesseract-ocr-for-php/blob/master/TesseractOCR/TesseractOCR.php
+
+http://www.amulyam.in/changePassword.do?oldPass=1yushbo&newPass=1yushbooze&confirmPass=1yushbooze
+
+
+
+sudo apt-get install apache2 libapache2-mod-php5 php5-curl php5-xdebug php5-gd php5-geoip php5-mcrypt php5-redis php5-memcache php5-memcached
+
+Login : rodie
+Password: k8kw0ws1
+Realm : Proxmox VE authentication server
+Panel de gestion des VPS: https://panel.stark-network.fr:8006
+
+VPS:
+- IPv4: 77.207.143.176
+- IPv4 (local): 192.168.0.230
+- Port IPv4: 23000 23099
+- Port SSH: 23022
+- Login: root
+- Password: k8kw0ws1
+
+k8kw0ws1
+
+
+yum -y groupinstall "Desktop" "Desktop Platform" "X Window System" "Fonts"

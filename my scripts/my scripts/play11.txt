@@ -1,0 +1,225 @@
+<title>Ul2 Blast By Suvo_Ghosh</title><center><div class="mainbox"><font color=green></font></div><html><head><style type="text/css"></style></head><body></body></html><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css"></style></head><body><font color="blue"></font><font color=red></font></font></body></html>
+<body bgcolor="black"><font color='Crimson'>
+<font size=6pt color=Crimson><b>Ultoo Live Output</b></font>
+<?php
+ob_implicit_flush(1);
+error_reporting(0);
+set_time_limit(0);
+ob_flush();
+flush();
+date_default_timezone_set('Asia/Kolkata');
+$sample_Date=  date("d-m-Y");
+$dir="./img";
+if(!is_dir($dir)) 
+{ 
+	mkdir($dir);  
+}	
+$ansnot=$coun=0;
+$proxy = $_REQUEST['proxy'];
+$captr=$_REQUEST['captr'];
+$cookie=$REQUEST['cookie'];
+$cap= $_REQUEST['cap'];
+$uid= $_REQUEST['uid'];
+$opti1=isset($_REQUEST['opti1'])?trim($_REQUEST['opti1']):"3";
+
+$loogc=0;
+
+$stack=array();
+$mobi = explode(",",$mx);
+$tteemmpp="";
+{
+	$url	= "http://ultoo.com";
+	$re	= "$url/relogin.php";
+	$login	= "$url/login.php";
+	$secure	= "$url/secure.php";
+	$poll="$url/poll.php";
+	$question="$url/PollCompleted.php";
+	$main	= "$url/mywallet.php?zxcoiesesscd=";
+	$bal	= "$url/transaction.php?credit=1&debit=1";
+	$bal2	= "$url/transaction.php";
+	$rst="$url/rechargeStatus.php?zxcoiesesscd=";
+	$logout = "$url/logout.php?LogOut=1";
+	
+	$matches[0]="";
+	$id=0;
+	$qs=0;
+	$jc=0;
+	$jck=0;
+	$qc=0;
+	$stop=0;
+$anserror=0;
+$agent = "Opera/9.80 (J2ME/MIDP; Opera Mini/4.5.33634/32.1440; U; en) Presto/2.8.119 Version/11.10";
+  $headers[] = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';
+  $headers[] = 'Connection: Keep-Alive';
+  $headers[] = 'Content-type: application/x-www-form-urlencoded;charset=UTF-8';
+  $headers[] = 'Accept-Language: en-us,en;q=0.8';
+  $headers[] = 'Accept-Encoding gzip,deflate';
+  $headers[] = 'Keep-Alive: 300';
+  $headers[] = 'Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7';
+  $headers[] = 'Cache-Control: max-age=0';
+	ob_flush();
+	relogin:
+	$cookie=$_REQUEST['cookie'];
+//$cookie="img/".$uid.".txt";
+	$stop=0;
+	$mobile_field="";
+	$msg_field="";	
+	$manual=0;
+	$ch = curl_init();
+	
+reloogin:
+		curl_setopt($ch, CURLOPT_URL, $secure);
+		curl_setopt( $ch, CURLOPT_USERAGENT, $agent );
+		curl_setopt($ch, CURLOPT_PROXY, $proxy);
+		curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
+		curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
+		 ///curl_setopt($ch, CURLOPT_PROXY, $proxy);
+		curl_setopt($ch, CURLOPT_HEADER, 1);
+		  curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+		curl_setopt($ch, CURLOPT_VERBOSE, 1);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				// curl_setopt($ch, CURLOPT_REFERER, $login);
+		$cap_data=$captr."=nlp&captcha=$cap";
+		//$cap_data=$captr[1]."=deep&lo­ginButton=LOGIN&recaptcha_challenge_fiel­d=03AHJ_VusDlNSHVOAAev-MCgjwXoxkKDRS9aak­RV84iZfpB6lfaZCjtBDo0hneyRI0ebD6lNcDMzQL­FU2oyH2JVvLWu54IrEfuO?5g-bSyQQiGExtdTaUim­ioMwxo_5Gu7vuD1N3qg3BBCRtHUKGQwntXi6UEk2­PxvqhQAVXQIQCj1BVtyY1p?agr54&recaptcha_re­sponse_field=dealings+almlrave";
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $cap_data);
+		$html=curl_exec($ch);
+		
+        if(stristr($html,"box do not match"))
+		{
+		curl_close($ch);
+		die("<h3><tt><font color=red>Captcha Not Ok :(</font></h3><b>");
+		}
+		if(stristr($html,"mywallet"))
+		{
+		echo "<h2><tt><font color=green>Captcha Is Ok :)</tt></h4><br>";
+		
+		}
+		else
+		{
+		echo "<h3><tt><font color=red>Missed</font></h3></tt>";
+		$loogc++;
+		if($loogc>1)
+		exit;
+		goto reloogin;
+		}
+
+}
+
+{
+ler:
+$posb="";
+curl_setopt($ch, CURLOPT_URL, $bal);
+curl_setopt( $ch, CURLOPT_USERAGENT, $agent );
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
+curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
+///curl_setopt($ch, CURLOPT_PROXY, $proxy);
+curl_setopt($ch, CURLOPT_HEADER, 1);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_VERBOSE, 1);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+// curl_setopt($ch, CURLOPT_REFERER, $rst);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $posb);
+$rm = curl_exec($ch);
+preg_match('/align="left" width="275" valign="top" class="monthes_heading_final">Rs.(.*?)</',$rm,$rk);
+$rs = $rk[1];
+echo "<b><br><font color=blue>Balence Is Now </font><font color=yellow>$rs</font><br>";
+
+ob_implicit_flush(1);
+flush();
+ob_flush(); 
+$first	= "http://ultoo.com/brands.php";
+$second	= "http://ultoo.com/brands_ques.php";
+$response	= "http://ultoo.com/brands_graph.php";
+$ch = curl_init();
+
+curl_setopt($ch, CURLOPT_URL, $first);
+		  curl_setopt( $ch, CURLOPT_USERAGENT, $agent );
+          curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
+          curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
+          curl_setopt($ch, CURLOPT_HEADER, 1);
+          curl_setopt($ch, CURLOPT_VERBOSE, 1);
+		curl_setopt($ch, CURLOPT_REFERER, $first );
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);	
+		
+
+$html=curl_exec($ch);
+
+
+curl_setopt($ch, CURLOPT_URL, $second);
+curl_setopt( $ch, CURLOPT_USERAGENT, $agent );
+curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
+curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
+curl_setopt($ch, CURLOPT_HEADER, 1);
+curl_setopt($ch, CURLOPT_VERBOSE, 1);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_REFERER, $second );
+$html=curl_exec($ch);
+
+preg_match('<type=\"radio\" value=\"(.*?)\" name=\"(.*?)\" class=\"hidden\" id=\"category_5\">',$html,$aa);
+$value = $aa[1];
+$name = $aa[2];
+echo "1111111111  ".$value."<br>".$name."<br>";
+		 
+preg_match("/type=\"hidden\" id=\"fbshare\" name=\"fbshare\" value=\"(.*?)\"/i",$html,$bb);
+$fbshare = $bb[1];
+echo "2222222222222 ".$fbshare."<br>";
+		  
+
+
+
+
+preg_match("/el.name='(.*)'.(.*)\((.*)\)/i", $html, $matches);
+	$name = $matches[1];
+	$func = $matches[2];
+	$index = $matches[3];
+	$index = explode(',', $index);
+	if ($index[1] == "") $index[1] = strlen($name);
+	if ($func == "substring" || $func == "slice") $newname = substr($name, $index[0], $index[1] - $index[0]);
+	elseif ($func == "substr") $newname = substr($name, $index[0], $index[1]);
+	elseif ($func == "charAt") $newname = $name[$index[0]];
+      elseif ($func == "toLowerCase") $newname = strtolower($name);
+        elseif ($func == "toUpperCase") $newname = strtoupper($name);
+	$submit = $newname . "=" . $name . $newname;
+
+
+
+
+
+
+
+
+
+
+
+preg_match('#<div class="qno">[\s]*Question no: (.*?)[\s]*</div>#',$html,$qnn);
+$qn = $qnn[1];
+echo "44444444444444 ".$qn."<br>";
+if($qn>=11)
+		{
+echo "<b><font color=blue>Completed..</font></br>"; 
+			ob_flush();
+        flush();
+			break;
+		}
+		 
+		 $post_data = "fbshare=0&$name=$value&$submit&button=Locking...";
+echo "data =	 $post_data ";
+curl_setopt($ch, CURLOPT_URL, $second);
+curl_setopt( $ch, CURLOPT_USERAGENT, $agent );
+curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
+curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
+curl_setopt($ch, CURLOPT_HEADER, 1);
+curl_setopt($ch, CURLOPT_VERBOSE, 1);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_REFERER, $second);
+curl_setopt($ch, CURLOPT_POST, 1);
+
+curl_setopt($ch, CURLOPT_POSTFIELDS,$post_data);
+				$hml=curl_exec($ch);
+
+}
+
+?>

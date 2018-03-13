@@ -1,0 +1,48 @@
+function clearname() {
+    $ = jQuery;
+    elem = $('.row-title');
+    for (var i = 0; i < elem.length; i++) {
+        if (elem.get(i).title.contains("Rj") ||elem.get(i).title.contains("By")) {
+            $(elem.get(i)).parent().next().next(".row-actions").children().get(1).children[0].click();
+            redit();
+            break;
+        }
+    }
+
+    function redit() {
+        for (var e = 0; e < 2; e++) {
+            $ = jQuery;
+            $($('.input-text-wrap').get(e)).children()[0].value = $($('.input-text-wrap').get(e)).children()[0].value.replace(" | By Rj", "");
+            $($('.input-text-wrap').get(e)).children()[0].value = $($('.input-text-wrap').get(e)).children()[0].value.replace(" - By Rj", "");
+            $($('.input-text-wrap').get(e)).children()[0].value = $($('.input-text-wrap').get(e)).children()[0].value.replace(" | By Rowan", "");
+            $($('.input-text-wrap').get(e)).children()[0].value = $($('.input-text-wrap').get(e)).children()[0].value.replace("-by-uday", "");
+            $('.button-primary.save.alignright').get(0).click();
+        }
+    }
+}
+
+
+
+$ = jQuery;
+$('document').ready(function () {
+    var loc = document.location.href;
+    if (loc.contains("message")) {
+        var init = loc.indexOf("post=") + 'post='.length;
+        var end = loc.indexOf("&action");
+        var newpost = parseInt(loc.substring(init, end)) + 1;
+        document.location.href = "http://www.alltechinone.com/wp-admin/post.php?post=" + newpost + "&action=edit";
+    }
+    else {
+    $('textarea#content').text($('textarea#content').text().replace("http://facebook.com/AllTypeHacks", "http://facebook.com/alltechinonefree"));
+    $('textarea#content').text($('textarea#content').text().replace("http://alltypehacks.blogspot.com/p/new-1000-working-trciks.html", "http://www.alltechinone.com"));
+    $('textarea#content').text($('textarea#content').text().replace("Thanks To AllTypeHacks", "Thanks To AllTechInOne"));
+    var text = $('textarea#content').text();
+    if (!text.contains("http://facebook.com/AllTypeHacks") && !text.contains("http://alltypehacks.blogspot.com/p/new-1000-working-trciks.html") && !text.contains("Thanks To AllTypeHacks"))
+    $('input#publish').click();
+    
+    }
+});
+
+
+
+49

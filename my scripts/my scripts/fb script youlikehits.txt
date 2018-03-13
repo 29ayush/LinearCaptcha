@@ -1,0 +1,32 @@
+var a = $('.mainfocusheader')[0].textContent;
+setTimeout(function(){ $('.followbutton')[0].click() },4000);
+var b=setInterval(function() {
+	setTimeout(function(){ $('.followbutton')[1].click(); },4500);
+	if($('.mainfocusheader')[0].textContent!=a)
+	{
+		a=$('.mainfocusheader')[0].textContent;
+		setTimeout(function(){ $('.followbutton')[0].click() },4000);
+	}
+},1000);
+
+
+if(document.location.href.conatains("viewwebsite.php"))
+setTimeout(function(){ window.close()
+
+
+uiPopoverButton PageLikedButton _52nf PageLikeButton uiPopoverButtonWithChevron uiButton uiButtonOverlay uiButtonLarge
+PageLikeButton uiButton uiButtonOverlay uiButtonLarge
+
+if(document.readyState=="complete" && document.referrer.contains("youlikehits"))
+{
+document.getElementsByClassName('PageLikeButton uiButton uiButtonOverlay uiButtonLarge')[0].click();
+if(document.getElementsByClassName('PageLikeButton uiButton uiButtonOverlay uiButtonLarge')[0].text=="Liked")
+{window.close();}
+else
+{document.reload;}
+}
+
+30 109 10:46PM 
+385 premium on 
+
+setTimeout(function(){},1000);

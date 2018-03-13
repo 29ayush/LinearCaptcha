@@ -1,0 +1,193 @@
+<?php
+set_time_limit(0);
+
+$url="http://www.amulyam.in";
+$login="$url/login.do";
+$home="$url/displayMyWallet.do";
+$mobile=$_REQUEST['mobile'];
+$password=$_REQUEST['password'];
+$agent=isset($_REQUEST['agent']) ? $_REQUEST['agent'] : "Opera/12.02 (Android 4.1; Linux; Opera Mobi/ADR-1111101157; U; en-US) Presto/2.9.201 Version/12.02";
+$cookie="Cookie/".rand(0,99999999).".txt";
+$proxy= !empty($_REQUEST['proxy']) ? $_REQUEST['proxy'] : "None";
+$unverified=isset($_REQUEST['unverified']) ? $_REQUEST['unverified'] : 0;
+
+
+$ch=curl_init();
+curl_setopt($ch, CURLOPT_URL, $login);
+curl_setopt($ch, CURLOPT_USERAGENT, $agent);
+curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
+curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+curl_setopt($ch, CURLOPT_VERBOSE, 1);
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$logindata = "mobile=$mobile&password=$password";
+curl_setopt($ch, CURLOPT_POSTFIELDS, $logindata);
+$loginhtml=curl_exec($ch);
+
+if(stristr($loginhtml,"Forgot Password")) die("<font size=10pt><font color='red'>wrongUSER&PASS</font></font>");
+elseif(!stristr($loginhtml,"Home")) die("<font size=10pt><font color='red'>Proxy Not Working</font></font>");
+else echo "<h1 style=\"color:green;\" >Login Successfull</h1>";
+
+echo "<hr> ";
+curl_setopt($ch, CURLOPT_URL, $home);
+curl_setopt($ch, CURLOPT_POST, 0);
+curl_setopt($ch, CURLOPT_REFERER, $login);
+$homehtml= curl_exec($ch);
+
+
+preg_match('/src=\"images\/rupee_symbol_verysmall.png\"> <b>(.*)<\//i',$homehtml,$matches);
+$initbal="Rs. ".$matches[1];
+
+echo "<span style=\"font-size:20px; color:blue; padding-left:2%;\"> Login Successul :) </span> <span style=\"display:block; float:right; color:red; margin-right:10%; font-size:20px;\"> Balance : $initbal </span> <hr>";
+//STARTING TRIVIA 
+$ref= "http://www.amulyam.in/home.do";
+$play="http://www.amulyam.in/playTrivia.do";
+
+curl_setopt($ch, CURLOPT_URL, $play);
+curl_setopt($ch, CURLOPT_POST, 0);
+curl_setopt($ch, CURLOPT_REFERER, $ref);
+$queshtml= curl_exec($ch);
+
+if(stristr($queshtml,'Enough for today.')) { printcus("50 Paise For Trivia Has Already Been Added","blue","200%"); die();}
+
+recap:
+preg_match("/Question (.*) of 25 /i",$queshtml,$matches);
+$cp = $matches[1];
+$ans = rand(1,2)==1? "TRUE" : "FALSE";
+
+$subquesurl= "http://www.amulyam.in/checkTrivia.do";
+$post = "cp=$cp&ans=$ans";
+
+curl_setopt($ch, CURLOPT_URL, $subquesurl);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+curl_setopt($ch, CURLOPT_REFERER, $ref);
+$quessubmit= curl_exec($ch);
+
+if(stristr($quessubmit,'Claim 50')) { goto claim; }
+
+echo "Question No. : ".$cp;
+
+preg_match("/<img src=\"(.*)\" alt=\"captcha\">/i",$quessubmit,$matches);
+
+$img="http://www.amulyam.in/".$matches[1];
+
+captcha:
+
+curl_setopt($ch, CURLOPT_URL, $img);
+curl_setopt($ch, CURLOPT_POST, 0);
+curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+curl_setopt($ch, CURLOPT_REFERER, $subquesurl);
+$abc = curl_exec($ch);
+
+$name = "img".rand(0, 999999999);
+$path = 'img/'.$name.'.png';
+$fh = fopen($path, 'x');
+fwrite($fh, $abc);
+fclose($fh);
+
+retext:
+$text = trim(str_replace(' ', '', img2txt($path)));
+if(stristr($text,'Thefiletypeisunknown')) goto captcha;
+if(stristr($text,'Theserveriscurrentlybusy')) goto retext;
+if(!ctype_alnum($text) && $matches[1]== "triviaCaptcha.do" || empty($text)) { printcus($text,"red"); goto captcha; }
+
+if($matches[1]== "triviaCaptcha.do") 
+{
+$capurl="http://www.amulyam.in/checkTriviaCaptcha.do";
+$postfields="cp=$cp&captcha=$text";
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $postfields);
+}
+else
+{
+$capurl="http://www.amulyam.in/checkTriviaLinkCaptcha.do?val=$text&cp=$cp&answer=$ans";
+}
+
+curl_setopt($ch, CURLOPT_URL, $capurl);
+curl_setopt($ch, CURLOPT_BINARYTRANSFER, 0);
+curl_setopt($ch, CURLOPT_REFERER, $subquesurl);
+$capsubmit = curl_exec($ch);
+
+if(stristr($capsubmit,'You have selected the wrong number'))
+{printcus($text,"red");
+}
+else
+{
+preg_match("/Question (.*) of 25 /i",$capsubmit,$matches);
+$cp1 = $matches[1];
+if ($cp==$cp1) {
+printcus($text,"red");
+goto recap;
+}
+printcus($text,"green");
+
+}
+
+echo "<hr>";
+$queshtml = $capsubmit;
+
+flush();
+ob_flush();
+
+goto recap;
+
+claim:
+curl_setopt($ch, CURLOPT_URL, "http://www.amulyam.in/playTrivia.do");
+$capsubmit = curl_exec($ch);
+
+preg_match_all("/amulyamCo.do\?cafp=goToBanner&bid(.*)\" target/",$capsubmit,$matches);
+
+$cap1="http://www.amulyam.in/amulyamCo.do?cafp=goToBanner&bid".$matches[1][0];
+$cap2="http://www.amulyam.in/amulyamCo.do?cafp=goToBanner&bid".$matches[1][1];
+
+curl_setopt($ch, CURLOPT_URL, $cap1);
+curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+$html = curl_exec($ch);
+
+curl_setopt($ch, CURLOPT_URL, $cap2);
+curl_setopt($ch, CURLOPT_TIMEOUT, 2);
+$html = curl_exec($ch);
+
+curl_setopt($ch, CURLOPT_URL, "http://www.amulyam.in/amulyamCo.do?cafp=claimTrivia");
+curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, "    ");
+$html = curl_exec($ch);
+
+if(stristr($html,"has been added in")) printcus("50 Paise For Trivia Has Been Added","blue","500%");
+else echo $html;
+
+function img2txt($imgpath)
+	{
+
+       $url = "http://maggie.ocrgrid.org/cgi-bin/weocr/ocr_scene.cgi";
+       $urlref = "http://maggie.ocrgrid.org/scene";
+
+       $datapage1 = array(
+		'userfile' => '@'.$imgpath,
+		'outputencoding' => 'utf-8',
+		'outputformat' => 'txt',
+	);
+	
+        $ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_REFERER, $urlref);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $datapage1);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$exec= curl_exec($ch);
+        return $exec;
+
+	}
+
+function printcus($text,$color,$size="initial")
+{
+if($size=="initial") $text="(".$text.")";
+echo "<span style=\"color:$color; font-size:$size\">$text</span>";
+}
+
+?>
+
+

@@ -1,0 +1,399 @@
+<?php
+function funocr($im)
+{
+$white=16777215;
+$black=0;
+$width=imagesx($im);
+$height=imagesy($im);
+$min=50000;
+//---------------------------------------Black & white karne ke liye---------------------------------------
+	for($j=0;$j<$height;$j++)
+	{	
+for($i=0;$i<$width;$i++){
+if(($j>40 && $j<102) || $j>141)
+{
+$colors[$i][$j]=0;
+continue;
+} 
+ $px=$colors[$i][$j]=imagecolorat($im,$i,$j);
+
+if($colors[$i][$j]>2302755)
+{
+    $colors[$i][$j]=16777215;
+}
+else
+{
+ $colors[$i][$j]=0;
+}
+/*  $fh = fopen('color2a.txt', 'a');
+fwrite($fh, "$i x $j=$px".PHP_EOL);
+fclose($fh);*/
+    }
+}
+////////////////////////////////////////------------------for upper 2 parts----------------------------------------//////////////////////////////
+$tempbox=array();
+$temparr=0;
+$box=array();
+$arr=0;
+$count=0;
+$waheguru1=0;
+//$im=imagecreatefromstring(file_get_contents("a2.png"));
+$istart=0;
+$maxx=$width;//imagesx($im);
+$maxy=$height;//imagesy($im);
+$inbox=0;
+$xstart=0;
+$txstart=$txend=0;
+for($j=0;$j<=3;$j++)
+{ 
+	$waheguru=0;
+	for($i=$istart;$i<$maxx;$i++)
+	{
+
+		foreach($box as $key => $val)
+        {
+			if($i>=$val['bstart']['x'] && $j<=$val['bstart']['y'] && $i>=$val['tstart']['x'] && $j>=$val['tstart']['y'] && $i<=$val['bend']['x'] && $j<=$val['bend']['y'] && $i<=$val['tend']['x'] && $j>=$val['tend']['y'])
+			{
+				$xstart=0;
+				$xend=0;
+                                $inbox=1;
+				break;
+			}
+		}
+        if($inbox==1)
+        {
+            $inbox=0;
+            continue;
+        }
+$px=$colors[$i][$j];
+
+if( $px==16777215 ) 
+{ 
+	$waheguru=1;
+	$waheguru1++;
+ }
+else
+{
+	$waheguru=0;
+	$waheguru1=0;
+}
+//print "$i X $j = $px <br>";
+
+if($waheguru1>33 && $xstart==0)
+{
+	if($colors[$i-33][$j+9]==16777215 && $colors[$i-33][$j+18]==16777215 && $colors[$i-33][$j+27]==16777215 && $colors[$i-33][$j+32]==16777215 && $colors[$i-33][$j+37]==16777215) 
+	{
+	       for($k=$j;$k<$j+38;$k++)
+	       {
+		if($colors[$i-33][$k]==16777215)
+		   continue;
+		else
+		   break;
+	       }
+	       if($k==$j+38)
+	       $xstart=$i-33;
+	}
+}
+if($waheguru==0 && $xstart!=0 && $waheguru1==0)
+{  
+	$xend=$i-1;
+	if($xend<$min)
+	$min=$xend;
+	
+	$tempbox[$temparr]['start']['x']=$xstart;
+	$tempbox[$temparr]['start']['y']=$j;
+	$tempbox[$temparr]['end']['x']=$xend;
+	$tempbox[$temparr]['end']['y']=$j;
+	$temparr++;
+	$count++;
+	if($count>3 && $count<=5)
+		$j=$j+5;
+	else
+		$j=$j+9;
+		$i=$xstart;
+	if($count>5)
+		{
+		//	print "bottom start= $xstart,$j and end = $xend,$j top start=$xstart,".($j-32)." and end=$xend,".($j-32)."<br>";
+		if($min-$tempbox[0]['start']['x']>42)
+		{
+		$box[$arr]['tstart']['x']=$tempbox[0]['start']['x'];
+        $box[$arr]['tstart']['y']=$tempbox[0]['start']['y'];
+        $box[$arr]['tend']['x']=$min;
+        $box[$arr]['tend']['y']=$tempbox[0]['end']['y'];
+        $box[$arr]['bstart']['x']=$tempbox[0]['start']['x'];
+        $box[$arr]['bstart']['y']=($tempbox[0]['start']['y'])+37;
+        $box[$arr]['bend']['x']=$min;
+        $box[$arr]['bend']['y']=($tempbox[0]['end']['y'])+37;
+		}
+		$xstart=$xend=0;
+        $arr++;
+		$istart=$i=$min;
+		$j=$tempbox[0]['end']['y'];
+		$min=50000;
+		$temparr=$count=0;
+		$tempbox=array();
+		}
+		}
+		
+	 }
+  }
+  ///-------------------------------------------------------------------------for lower 2 parts------------------------------------------------------
+  //148
+  $istart=0;
+  for($j=103;$j<=105;$j++)
+{ 
+	$waheguru=0;
+	for($i=$istart;$i<$maxx;$i++)
+	{
+
+		foreach($box as $key => $val)
+        {
+			if($i>=$val['bstart']['x'] && $j<=$val['bstart']['y'] && $i>=$val['tstart']['x'] && $j>=$val['tstart']['y'] && $i<=$val['bend']['x'] && $j<=$val['bend']['y'] && $i<=$val['tend']['x'] && $j>=$val['tend']['y'])
+			{
+				$xstart=0;
+				$xend=0;
+                                $inbox=1;
+				break;
+			}
+		}
+        if($inbox==1)
+        {
+            $inbox=0;
+            continue;
+        }
+$px=$colors[$i][$j];
+
+if( $px==16777215 ) 
+{ 
+	$waheguru=1;
+	$waheguru1++;
+ }
+else
+{
+	$waheguru=0;
+	$waheguru1=0;
+}
+//print "$i X $j = $px <br>";
+
+if($waheguru1>33 && $xstart==0)
+{
+ $c=33;
+f: $k=$i-$c;
+//print $colors[$k][$j+9].' '.$colors[$k][$j+18].' '.$colors[$k][$j+27].' '.$colors[$k][$j+32].'\n';
+	if($colors[$k][$j+9]==16777215 && $colors[$k][$j+18]==16777215 && $colors[$k][$j+27]==16777215 && $colors[$k][$j+32]==16777215) 
+	{
+	       for($m=$j;$m<$j+33;$m++)
+	       {
+		if($colors[$k][$m]==16777215)
+		   continue;
+		else
+		   break;
+	       }
+	       if($m==$j+33)
+	       $xstart=$i-$c;
+	}
+	else
+	{
+	 $c--;
+	 if($c>0)
+	 goto f;
+	}
+}
+if($waheguru==0 && $xstart!=0 && $waheguru1==0)
+{  
+	$xend=$i-1;
+	if($xend<$min)
+	$min=$xend;
+	
+	$tempbox[$temparr]['start']['x']=$xstart;
+	$tempbox[$temparr]['start']['y']=$j;
+	$tempbox[$temparr]['end']['x']=$xend;
+	$tempbox[$temparr]['end']['y']=$j;
+	$temparr++;
+	$count++;
+	if($count>3 && $count<=4)
+		$j=$j+5;
+	else
+		$j=$j+9;
+		$i=$xstart;
+	if($count>4)
+		{
+		//	print "bottom start= $xstart,$j and end = $xend,$j top start=$xstart,".($j-32)." and end=$xend,".($j-32)."<br>";
+		if($min-$tempbox[0]['start']['x']>42)
+		{
+		$box[$arr]['tstart']['x']=$tempbox[0]['start']['x'];
+        $box[$arr]['tstart']['y']=$tempbox[0]['start']['y'];
+        $box[$arr]['tend']['x']=$min;
+        $box[$arr]['tend']['y']=$tempbox[0]['end']['y'];
+        $box[$arr]['bstart']['x']=$tempbox[0]['start']['x'];
+        $box[$arr]['bstart']['y']=($tempbox[0]['start']['y'])+34;
+        $box[$arr]['bend']['x']=$min;
+        $box[$arr]['bend']['y']=($tempbox[0]['end']['y'])+34;
+		}
+		$xstart=$xend=0;
+        $arr++;
+		$istart=$i=$min;
+		$j=$tempbox[0]['end']['y'];
+		$min=50000;
+		$temparr=$count=0;
+		$tempbox=array();
+		}
+		}
+		
+	 }
+  }
+  
+  
+  
+  
+  
+//var_dump($box);
+//header('Content-Type: image/png');
+
+
+         //  ---------------------------  jodne ke liye--------------------------------------------
+for($i=0;$i<$width;$i++)
+{
+for($j=0;$j<$height;$j++)
+{
+    if($i>0 && $i<$width-1 && $j>0 && $j<$height-1)
+    {
+$px= $colors[$i][$j];
+$xm1=$colors[$i-1][$j];
+$xp1=$colors[$i+1][$j];
+$ym1=$colors[$i][$j-1];
+$yp1=$colors[$i][$j+1];
+
+if(($px==16777215 && $xp1!=$white && $xm1!=$white) || ($px==16777215 && $yp1!=$white && $ym1!=$white))
+{
+   $colors[$i][$j]=0;
+}
+    }
+    }
+}
+$im = imagecreatetruecolor($width, $height);
+for($i=0;$i<$width;$i++)
+{
+for($j=0;$j<$height;$j++)
+{
+
+if($colors[$i][$j]==0)
+imagesetpixel($im,$i,$j,0);
+else
+imagesetpixel($im,$i,$j,16777215);
+}
+}
+
+$tempbox=array();
+//imagepng($im,'a.png');
+foreach($box as $key => $val)
+        {
+		$dest = imagecreatetruecolor($val['tend']['x']-$val['tstart']['x'],$val['bstart']['y']-$val['tstart']['y']);
+		imagecopy ($dest , $im , 0,0, $val['tstart']['x'] , $val['tstart']['y'] , $val['bend']['x']-$val['bstart']['x'],$val['bstart']['y']-$val['tstart']['y'] );
+		
+		
+$database = unserialize(@file_get_contents("database.dat"));
+if($database === false) $database = array();
+
+// modify the database if needed
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+	if($_POST['submit'] == 'Add')
+		$database[$_POST['ident']] = substr($_POST['letter'], 0, 1);
+	if($_POST['submit'] == 'Del')
+		unset($database[$_POST['ident']]);
+	if($fh = @fopen('database.dat', 'w+')){
+		fwrite($fh, serialize($database));
+		fclose($fh);
+	}
+	
+	
+}else{
+	$newimage = true;
+	
+}
+//imagefilter($dest, IMG_FILTER_GRAYSCALE);
+	$width=imagesx($dest);
+		$height=imagesy($dest);
+$captcha_gridstart   = 1;
+$captcha_gridspace   = 2;
+$letters = findletters1($dest, $width, $height, $captcha_gridstart, $captcha_gridspace);
+$count   = count($letters);
+$cellw   = ($count > 0) ? intval(100 / $count) : 0;
+
+
+$a="";
+foreach($letters as $letter){
+$asciiletter = $database[$letter['ident']];
+if(!empty($asciiletter)) {
+if($asciiletter=='|')
+$asciiletter='0';
+$a.=$asciiletter;
+}
+}
+		array_push($tempbox,$a);
+		imagedestroy($dest);
+		}
+		return $tempbox;
+}
+//dispeckle the image and GET co-ordinates of the characters of captcha image and return them. 
+function findletters1($image, $width, $height, $gridstart, $gridspace)
+{
+	$offsets  = array(); $o = 0;
+	$atstartx = true;
+	for($x = 0; $x < $width; $x++){
+		$blankx = true;
+		for($y = 0; $y < $height; $y++){
+			if(imagecolorat($image, $x, $y) == 0){
+				$blankx = false;
+				break;
+			}
+		}
+		if(!$blankx && $atstartx){
+			$offsets[$o]['startx'] = $x;
+			$atstartx = !$atstartx;
+		}else if($blankx && !$atstartx){
+			$offsets[$o]['endx']   = $x;
+			$atstartx = !$atstartx;
+			$o++;
+		}
+	}
+	$count = $o;
+	for($o = 0; $o < $count; $o++){
+		for($y = 0; $y < $height; $y++){
+			$blanky = true;
+			for($x = $offsets[$o]['startx']; $x < $offsets[$o]['endx']; $x++){
+				if(imagecolorat($image, $x, $y) == 0){
+					$blanky = false;
+					break;
+				}
+			}
+			if(!$blanky){
+				$offsets[$o]['starty'] = $y;
+				break;
+			}
+		}
+		for($y = $height-1; $y > $offsets[$o]['starty']; $y--){
+			$blanky = true;
+			for($x = $offsets[$o]['startx']; $x < $offsets[$o]['endx']; $x++){
+				if(imagecolorat($image, $x, $y) == 0){
+					$blanky = false;
+					break;
+				}
+			}
+			if(!$blanky){
+				$offsets[$o]['endy'] = $y;
+				break;
+			}
+		}
+	}
+	for($o = 0; $o < $count; $o++){
+		$offsets[$o]['ident'] = "";
+		for($x = $offsets[$o]['startx'] + $gridstart; $x < $offsets[$o]['endx']; $x += $gridspace){
+			for($y = $offsets[$o]['starty'] + $gridstart; $y < $offsets[$o]['endy']; $y += $gridspace){
+				$offsets[$o]['ident'] .= ((imagecolorat($image, $x, $y) == 0) ? "0" : "1");
+			}
+		}
+	}
+	return $offsets;
+}
+?>

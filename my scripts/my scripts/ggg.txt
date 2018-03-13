@@ -1,0 +1,22 @@
+
+function rrmdir($dir) {
+   if (is_dir($dir)) {
+     $objects = scandir($dir);
+     foreach ($objects as $object) {
+       if ($object != "." && $object != "..") {
+         if (filetype($dir."/".$object) == "dir") 
+             {
+                  if(is_dir_empty($dir."/".$object)) rmdir($dir."/".$object); else rrmdir($dir."/".$object);
+             }
+         else unlink($dir."/".$object);
+       }
+     }
+     reset($objects);
+     rmdir($dir);
+   }
+ }
+
+function is_dir_empty($dir) {
+  if (!is_readable($dir)) return NULL; 
+  return (count(scandir($dir)) == 2);
+}

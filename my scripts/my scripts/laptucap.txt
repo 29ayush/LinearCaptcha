@@ -1,0 +1,164 @@
+<title>Laptu Earner </title><div style="background: green; padding:4px; color:white" align="center">
+<font size=5pt><font/></div>
+<font color=red>Laptu Earner by Don</font>
+
+<p align="center">
+<b> <script src="http://greentooth.xtgem.com/j/time.js"></script></b></p> 
+
+<?php
+
+##This Script made by Khiladi.Plz Dont Remove This Command Line.
+##
+
+$cn = str_replace(".","",$_SERVER['REMOTE_ADDR']);
+
+$cookie = "coki/".$cn.".txt";
+
+$proxy = $_REQUEST['proxy'];
+
+$ch = curl_init();
+$uid = $_REQUEST['uid'];
+
+$pwd = $_REQUEST['pwd'];
+
+
+$url="http://u.laaptu.com/login.action";
+
+
+$data = "username=$uid&password=$pwd";
+
+curl_setopt($ch, CURLOPT_COOKIESESSION, true);
+
+curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie);
+
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+
+curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
+
+curl_setopt($ch, CURLOPT_URL,"$url");
+
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+
+curl_setopt($ch,CURLOPT_ENCODING,"gzip,deflate");
+
+curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.7 (KHTML, like Gecko) Chrome/26.0.912.36 Safari/535.7');
+
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+curl_setopt($ch, CURLOPT_REFERER, "http://u.laaptu.com/login22.action");
+
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+
+curl_setopt($ch, CURLOPT_AUTOREFERER, 1)
+;
+curl_setopt($ch, CURLOPT_POST, 1)
+;
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+
+curl_setopt($ch, CURLOPT_HEADER, 1);
+
+curl_setopt($ch, CURLOPT_POSTFIELDS,"$data");
+
+
+
+$html=curl_exec($ch);
+curl_close($ch);
+
+if(!stristr($html,"Validaccount.action"))
+{
+echo"<b><font color=red>Invalid Email/Password. <br> Please Try Again with Proper Details. </font></b></div>";
+die(".");
+}
+
+
+preg_match('/id=(.*?)\?/', $html, $matches);
+$id = $matches[1];
+$ch = curl_init();
+
+$url = "http://u.laaptu.com/Validaccount.action?id=$id";
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+
+curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
+
+curl_setopt($ch, CURLOPT_URL,$url);
+
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+
+curl_setopt($ch, CURLOPT_HEADER, 1);
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+
+
+$html=curl_exec($ch);
+
+curl_close($ch);
+
+preg_match("/loadcap.jpg\?pd=(.*?)=str/i",$html,$matches);
+
+$smd = $matches[1];
+
+$rd = "'.$smd.'&str1=str";
+
+$ch = curl_init();
+
+$url = "http://u.laaptu.com/loadcap.jpg?pd=$rd";
+
+curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie);
+
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+
+curl_setopt($ch, CURLOPT_URL,$url);
+
+curl_setopt($ch, CURLOPT_COOKIE, true);
+
+curl_setopt($ch, CURLOPT_REFERER, "http://u.laaptu.com/Validaccount.action?id=$id");
+
+curl_setopt($ch, CURLOPT_HEADER, 0);
+
+curl_setopt($ch, CURLOPT_PROXY, $proxy);
+
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+
+
+$html=curl_exec($ch);
+curl_close($ch);
+
+
+$name = "img/".rand(1,99999).".png";
+
+$myFile = $name;
+
+
+$fh = fopen($myFile, 'w') or die("can't open file");
+
+$stringData = $html;
+fwrite($fh, $stringData);
+fclose($fh);
+
+?>
+
+<center>
+<img src=<?php
+echo $name;?>><br>
+<form method=post action=play.php>
+<input type=text name=c>
+<input type=hidden name=img value=<?php
+echo $name; ?>>
+<?php
+
+echo '<input type="hidden" name="proxy" value="'.$proxy.'">';
+
+echo '<input type="hidden" name="to" value="'.$to.'">';
+
+echo '<input type="hidden" name="uid" value="'.$uid.'">';
+
+echo '<input type="hidden" name="pwd" value="'.$pwd.'">';
+?>
+<input type=submit value=Math&Fun>
+</form>

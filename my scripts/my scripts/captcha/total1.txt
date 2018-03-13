@@ -1,0 +1,10 @@
+
+Current time := 01-05-2014 02:58:24
+UID:= 7619981135
+poll:= Rs. 0.1
+poll question bonus:= Rs. 0.5
+Answer IT:= Rs. 1
+Total := Rs.6.73
+
++++++++++++++++++++++++++++++++++++++++~
+
